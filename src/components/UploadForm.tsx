@@ -93,16 +93,16 @@ const UploadForm: React.FC = () => {
   const initCollapsibles = () => {
     const coll = document.getElementsByClassName("collapsible");
     for (let i = 0; i < coll.length; i++) {
-      coll[i].addEventListener("click", function () {
-        this.classList.toggle("active");
-        const content = this.nextElementSibling;
-        if (content.style.maxHeight) {
-          content.style.maxHeight = null;
-        } else {
-          content.style.maxHeight = content.scrollHeight + "px";
-        }
-      });
+  coll[i].addEventListener("click", function (this: HTMLElement) {
+    this.classList.toggle("active");
+    const content = this.nextElementSibling as HTMLElement;
+    if (content.style.maxHeight) {
+      content.style.maxHeight = "";
+    } else {
+      content.style.maxHeight = content.scrollHeight + "px";
     }
+  } as EventListener);
+}
   };
 
   return (
