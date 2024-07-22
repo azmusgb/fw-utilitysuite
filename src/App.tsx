@@ -18,7 +18,6 @@ const App: React.FC = () => {
       <Header />
       <MainContent>
         <h1>FormWorks Agent Service Script</h1>
-        <SearchComponent />
         <QueryForm />
         <UploadForm />
         <ResultsComponent />
