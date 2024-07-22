@@ -1,5 +1,15 @@
-
 import React from 'react';
+
+const executeSatCommand = () => {
+  document.getElementById('satCommandLoading').style.display = 'block';
+  document.getElementById('satCommandFeedback').style.display = 'none';
+  setTimeout(() => {
+    document.getElementById('satCommandLoading').style.display = 'none';
+    document.getElementById('satCommandFeedback').style.display = 'block';
+    document.getElementById('satCommandFeedback').textContent = 'SAT Command executed successfully!';
+    document.getElementById('satCommandFeedback').classList.add('success');
+  }, 2000);
+};
 
 const SATCommand = () => (
   <div className="container">
@@ -24,16 +34,5 @@ const SATCommand = () => (
     <div id="satCommandFeedback" className="feedback" role="alert"></div>
   </div>
 );
-
-const executeSatCommand = () => {
-  document.getElementById('satCommandLoading').style.display = 'block';
-  document.getElementById('satCommandFeedback').style.display = 'none';
-  setTimeout(() => {
-    document.getElementById('satCommandLoading').style.display = 'none';
-    document.getElementById('satCommandFeedback').style.display = 'block';
-    document.getElementById('satCommandFeedback').textContent = 'SAT Command executed successfully!';
-    document.getElementById('satCommandFeedback').classList.add('success');
-  }, 2000);
-};
 
 export default SATCommand;
