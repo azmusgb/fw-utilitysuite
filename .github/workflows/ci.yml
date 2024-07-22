@@ -19,6 +19,13 @@ jobs:
       - name: Install essential tools
         run: sudo apt-get update && sudo apt-get install -y tar git
 
+      - name: Verify tar and git installation
+        run: |
+          which tar
+          tar --version
+          which git
+          git --version
+
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
