@@ -14,6 +14,7 @@ jobs:
       image: node:20
     env:
       ACTIONS_RUNNER_DEBUG: true
+      CI: true
     steps:
       - name: Enable debug logging
         run: echo "##[debug] Debug logging is enabled"
@@ -63,12 +64,29 @@ jobs:
 
       - name: Install dependencies
         run: |
+          retry() {
+            local n=1
+            local max=5
+            local delay=5
+            while true; do
+              "$@" && break || {
+                if [[ $n -lt $max ]]; then
+                  ((n++))
+                  echo "Command failed. Attempt $n/$max:"
+                  sleep $delay;
+                else
+                  echo "The command has failed after $n attempts."
+                  return 1
+                fi
+              }
+            done
+          }
           if [ -f package-lock.json ]; then
             echo "##[debug] Installing dependencies using npm ci"
-            npm ci
+            retry npm ci
           else
             echo "##[debug] Installing dependencies using npm install"
-            npm install
+            retry npm install
           fi
           echo "##[debug] Dependencies installed"
         env:
