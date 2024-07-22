@@ -116,6 +116,16 @@ const queryServices = () => {
   }
 };
 
+const searchCards = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const searchTerm = event.target.value.toLowerCase();
+  const cards = Array.from(document.getElementsByClassName('card') as HTMLCollectionOf<HTMLElement>);
+
+  for (let card of cards) {
+    const cardText = card.textContent?.toLowerCase() || '';
+    card.style.display = cardText.includes(searchTerm) ? '' : 'none';
+  }
+};
+
 const QueryForm: React.FC = () => {
   return (
     <div>
@@ -131,6 +141,7 @@ const QueryForm: React.FC = () => {
         </select>
         <button type="submit">Query</button>
       </form>
+      <input type="text" id="searchInput" placeholder="Search..." aria-label="Search" onInput={searchCards} />
       <div id="results"></div>
       <div id="loading" className="loading" style={{ display: 'none' }}>
         <div className="loading-spinner"></div>
