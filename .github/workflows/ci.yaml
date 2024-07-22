@@ -114,15 +114,6 @@ jobs:
         with:
           retain_days: 1
 
-  test:
-    runs-on: ubuntu-latest
-    container:
-      image: node:20
-    needs: install
-    env:
-      ACTIONS_RUNNER_DEBUG: true
-      PATH: node_modules/.bin:$PATH
-    steps:
       - name: Install essential tools
         shell: bash
         run: |
@@ -158,14 +149,6 @@ jobs:
           npm test
           echo "##[debug] Tests completed"
 
-  build:
-    runs-on: ubuntu-latest
-    container:
-      image: node:20
-    needs: test
-    env:
-      ACTIONS_RUNNER_DEBUG: true
-    steps:
       - name: Install essential tools
         shell: bash
         run: |
@@ -207,14 +190,6 @@ jobs:
           name: build-artifacts
           path: build
 
-  deploy:
-    runs-on: ubuntu-latest
-    container:
-      image: node:20
-    needs: build
-    env:
-      ACTIONS_RUNNER_DEBUG: true
-    steps:
       - name: Install essential tools
         shell: bash
         run: |
