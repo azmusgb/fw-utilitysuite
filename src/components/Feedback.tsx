@@ -2,7 +2,7 @@ import React from 'react';
 
 interface FeedbackProps {
   message: string;
-  type: string;
+  type: 'success' | 'error' | 'info'; // You can add more types as needed
 }
 
 const Feedback: React.FC<FeedbackProps> = ({ message, type }) => (
