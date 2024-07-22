@@ -60,6 +60,7 @@ jobs:
     needs: install
     env:
       ACTIONS_RUNNER_DEBUG: true
+      PATH: node_modules/.bin:$PATH
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
