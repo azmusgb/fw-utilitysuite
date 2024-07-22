@@ -66,7 +66,7 @@ const initCollapsibles = () => {
       this.classList.toggle("active");
       const content = this.nextElementSibling as HTMLElement;
       if (content.style.maxHeight) {
-        content.style.maxHeight = null;
+        content.style.maxHeight = "";
       } else {
         content.style.maxHeight = content.scrollHeight + "px";
       }
