@@ -64,6 +64,15 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-node-
 
+      - name: Clear npm cache
+        shell: bash
+        run: npm cache clean --force
+
+      - name: Remove node_modules and package-lock.json
+        shell: bash
+        run: |
+          rm -rf node_modules package-lock.json
+
       - name: Install dependencies
         shell: bash
         run: |
