@@ -6,7 +6,6 @@ import Header from './components/common/Header';
 import Footer from './components/common/Footer';
 import MainContent from './components/common/MainContent';
 import DarkModeToggle from './components/DarkModeToggle';
-import SearchComponent from './components/SearchComponent';
 import QueryForm from './components/QueryForm';
 import UploadForm from './components/UploadForm';
 import ResultsComponent from './components/ResultsComponent';
