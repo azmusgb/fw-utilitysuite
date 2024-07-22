@@ -60,7 +60,7 @@ const createServiceCard = (server: string, serviceName: string, serviceStatus: s
 };
 
 const initCollapsibles = () => {
-  const coll = document.getElementsByClassName("collapsible");
+  const coll = document.getElementsByClassName("collapsible") as HTMLCollectionOf<HTMLElement>;
   for (let i = 0; i < coll.length; i++) {
     coll[i].addEventListener("click", function (this: HTMLElement) {
       this.classList.toggle("active");
@@ -118,7 +118,7 @@ const queryServices = () => {
 
 const searchCards = (event: React.ChangeEvent<HTMLInputElement>) => {
   const searchTerm = event.target.value.toLowerCase();
-  const cards = Array.from(document.getElementsByClassName('card'));
+  const cards = Array.from(document.getElementsByClassName('card') as HTMLCollectionOf<HTMLElement>);
 
   for (let card of cards) {
     const cardElement = card as HTMLElement;
