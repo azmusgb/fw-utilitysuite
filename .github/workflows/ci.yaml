@@ -73,33 +73,15 @@ jobs:
         run: |
           rm -rf node_modules package-lock.json
 
+      - name: Remove jest from package.json
+        shell: bash
+        run: |
+          sed -i '/"jest":/d' package.json
+
       - name: Install dependencies
         shell: bash
         run: |
-          retry() {
-            local n=1
-            local max=5
-            local delay=5
-            while true; do
-              "$@" && break || {
-                if [[ $n -lt $max ]]; then
-                  ((n++))
-                  echo "Command failed. Attempt $n/$max:"
-                  sleep $delay;
-                else
-                  echo "The command has failed after $n attempts."
-                  return 1
-                fi
-              }
-            done
-          }
-          if [ -f package-lock.json ]; then
-            echo "##[debug] Installing dependencies using npm ci"
-            retry npm ci
-          else
-            echo "##[debug] Installing dependencies using npm install"
-            retry npm install
-          fi
+          npm install
           echo "##[debug] Dependencies installed"
           npm list --depth=0
 
