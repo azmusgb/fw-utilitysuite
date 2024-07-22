@@ -1,5 +1,15 @@
-
 import React from 'react';
+
+const createDCNFile = () => {
+  document.getElementById('dcnCreationLoading').style.display = 'block';
+  document.getElementById('dcnCreationFeedback').style.display = 'none';
+  setTimeout(() => {
+    document.getElementById('dcnCreationLoading').style.display = 'none';
+    document.getElementById('dcnCreationFeedback').style.display = 'block';
+    document.getElementById('dcnCreationFeedback').textContent = 'DCN File created successfully!';
+    document.getElementById('dcnCreationFeedback').classList.add('success');
+  }, 2000);
+};
 
 const DCNCreation = () => (
   <div className="container">
@@ -21,16 +31,5 @@ const DCNCreation = () => (
     <div id="dcnCreationFeedback" className="feedback" role="alert"></div>
   </div>
 );
-
-const createDCNFile = () => {
-  document.getElementById('dcnCreationLoading').style.display = 'block';
-  document.getElementById('dcnCreationFeedback').style.display = 'none';
-  setTimeout(() => {
-    document.getElementById('dcnCreationLoading').style.display = 'none';
-    document.getElementById('dcnCreationFeedback').style.display = 'block';
-    document.getElementById('dcnCreationFeedback').textContent = 'DCN File created successfully!';
-    document.getElementById('dcnCreationFeedback').classList.add('success');
-  }, 2000);
-};
 
 export default DCNCreation;
