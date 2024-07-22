@@ -15,15 +15,12 @@ jobs:
     steps:
       - name: Enable debug logging
         run: echo "##[debug] Debug logging is enabled"
-      
-      - name: Install tar
-        run: sudo apt-get update && sudo apt-get install -y tar
 
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-
+      
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
