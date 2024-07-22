@@ -47,7 +47,6 @@ const QueryForm: React.FC = () => {
         </select>
         <button type="submit">Query</button>
       </form>
-      <SearchComponent />
       <div id="results">
         {results}
       </div>
