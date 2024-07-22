@@ -1,5 +1,5 @@
 import React, { lazy, Suspense } from 'react';
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import './App.css';
 import Header from './components/common/Header';
 import Navigation from './components/common/Navigation';
@@ -24,12 +24,12 @@ const App: React.FC = () => {
         <Header />
         <Navigation />
         <Suspense fallback={<div>Loading...</div>}>
-          <Switch>
-            <Route path="/" exact component={Home} />
-            <Route path="/tools" component={Tools} />
-            <Route path="/faq" component={FAQ} />
-            <Route path="/settings" component={Settings} />
-          </Switch>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/tools" element={<Tools />} />
+            <Route path="/faq" element={<FAQ />} />
+            <Route path="/settings" element={<Settings />} />
+          </Routes>
         </Suspense>
       </div>
     </Router>
