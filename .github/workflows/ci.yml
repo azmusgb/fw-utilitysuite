@@ -25,21 +25,25 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: '20'
+        run: echo "##[debug] Node.js v20 setup complete"
 
       - name: Cache Node.js modules
         id: cache
         uses: actions/cache@v3
         with:
           path: ~/.npm
-          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          key: ${{ runner.os }}-node-20-${{ hashFiles('**/package-lock.json') }}
           restore-keys: |
-            ${{ runner.os }}-node-
+            ${{ runner.os }}-node-20-
+        run: echo "##[debug] Cache Node.js modules step complete"
 
       - name: Install dependencies
         run: |
           echo "##[debug] Installing dependencies"
           npm ci
           echo "##[debug] Dependencies installed"
+        env:
+          CI: true
 
   test:
     runs-on: ubuntu-latest
@@ -61,9 +65,9 @@ jobs:
         uses: actions/cache@v3
         with:
           path: ~/.npm
-          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          key: ${{ runner.os }}-node-20-${{ hashFiles('**/package-lock.json') }}
           restore-keys: |
-            ${{ runner.os }}-node-
+            ${{ runner.os }}-node-20-
 
       - name: Run tests
         run: |
@@ -91,9 +95,9 @@ jobs:
         uses: actions/cache@v3
         with:
           path: ~/.npm
-          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          key: ${{ runner.os }}-node-20-${{ hashFiles('**/package-lock.json') }}
           restore-keys: |
-            ${{ runner.os }}-node-
+            ${{ runner.os }}-node-20-
 
       - name: Build
         run: |
@@ -127,9 +131,9 @@ jobs:
         uses: actions/cache@v3
         with:
           path: ~/.npm
-          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          key: ${{ runner.os }}-node-20-${{ hashFiles('**/package-lock.json') }}
           restore-keys: |
-            ${{ runner.os }}-node-
+            ${{ runner.os }}-node-20-
 
       - name: Configure Git
         run: |
