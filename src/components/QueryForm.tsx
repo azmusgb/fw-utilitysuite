@@ -116,18 +116,6 @@ const queryServices = () => {
   }
 };
 
-const searchCards = (event: React.ChangeEvent<HTMLInputElement>) => {
-  const searchTerm = event.target.value.toLowerCase();
-  const cards = Array.from(document.getElementsByClassName('card'));
-
-  cards.forEach(card => {
-    const cardElement = card as HTMLElement;
-    const cardText = cardElement.textContent?.toLowerCase() || '';
-    cardElement.style.display = cardText.includes(searchTerm) ? '' : 'none';
-  });
-};
-
-
 const QueryForm: React.FC = () => {
   return (
     <div>
