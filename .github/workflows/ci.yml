@@ -48,6 +48,9 @@ jobs:
         env:
           CI: true
 
+      - name: List installed packages
+        run: npm list --depth=0
+
       - name: Show npm debug log if install fails
         if: failure()
         run: cat ~/.npm/_logs/*.log
