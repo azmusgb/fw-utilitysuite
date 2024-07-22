@@ -1,119 +1,70 @@
-name: CI
-
-on:
-  push:
-    branches: ["main"]
-  pull_request:
-    branches: ["main"]
-  workflow_dispatch:
-
-jobs:
-  ci:
-    runs-on: ubuntu-latest
-    container:
-      image: node:20
-    env:
-      ACTIONS_RUNNER_DEBUG: true
-      CI: true
-    steps:
-      - name: Enable debug logging
-        run: echo "##[debug] Debug logging is enabled"
-
-      - name: Install essential tools
-        shell: bash
-        run: |
-          apt-get update
-          apt-get install -y tar git
-
-      - name: Verify tar and git installation
-        shell: bash
-        run: |
-          which tar
-          tar --version
-          which git
-          git --version
-
-      - name: Checkout repository
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-          repository: azmusgb/fw-utilitysuite
-          token: ${{ secrets.GITHUB_TOKEN }}
-          ssh-strict: true
-          ssh-user: git
-          persist-credentials: true
-          clean: true
-          sparse-checkout-cone-mode: true
-          fetch-tags: false
-          show-progress: true
-          lfs: false
-          submodules: false
-          set-safe-directory: true
-
-      - name: Set up Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: '20'
-
-      - name: Clear npm cache
-        shell: bash
-        run: npm cache clean --force
-
-      - name: Remove node_modules and package-lock.json
-        shell: bash
-        run: |
-          rm -rf node_modules package-lock.json
-
-      - name: Install dependencies without cache
-        shell: bash
-        run: |
-          npm install
-          echo "##[debug] Dependencies installed"
-          npm list --depth=0
-
-      - name: Show npm debug log if install fails
-        if: failure()
-        shell: bash
-        run: |
-          if [ -f ~/.npm/_logs/*.log ]; then
-            cat ~/.npm/_logs/*.log
-          else
-            echo "No npm debug log found"
-          fi
-
-      - name: Run tests
-        shell: bash
-        run: |
-          echo "##[debug] Running tests"
-          npm test
-          echo "##[debug] Tests completed"
-
-      - name: Build
-        shell: bash
-        run: |
-          echo "##[debug] Building the project"
-          npm run build
-          echo "##[debug] Build completed"
-
-      - name: Upload build artifacts
-        uses: actions/upload-artifact@v3
-        with:
-          name: build-artifacts
-          path: build
-
-      - name: Configure Git
-        shell: bash
-        run: |
-          echo "##[debug] Configuring Git"
-          git config --global user.email "wjrahe@gmail.com"
-          git config --global user.name "William Rahe"
-          echo "##[debug] Git configuration complete"
-
-      - name: Deploy to GitHub Pages
-        shell: bash
-        run: |
-          echo "##[debug] Deploying to GitHub Pages"
-          npm run deploy
-          echo "##[debug] Deployment to GitHub Pages completed"
-        env:
-          GITHUB_TOKEN: ${{ secrets.ACTIONS_DEPLOY_KEY }}
+{
+  "name": "fw-utilitysuite",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "@babel/core": "^7.16.7",
+    "@babel/plugin-proposal-private-methods": "^7.16.7",
+    "@babel/plugin-proposal-private-property-in-object": "^7.16.7",
+    "@testing-library/jest-dom": "^5.14.1",
+    "@testing-library/react": "^11.2.7",
+    "@testing-library/user-event": "^12.8.3",
+    "@types/jest": "^26.0.23",
+    "@types/node": "^12.20.13",
+    "@types/react": "^17.0.11",
+    "@types/react-dom": "^17.0.8",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "react-router-dom": "^5.2.0",
+    "react-scripts": "4.0.3",
+    "react-chartjs-2": "^2.11.1", // Add this line
+    "typescript": "^4.3.5",
+    "web-vitals": "^1.1.2"
+  },
+  "devDependencies": {
+    "@babel/plugin-proposal-private-property-in-object": "^7.16.7",
+    "eslint": "^7.32.0",
+    "eslint-config-airbnb": "^18.2.1",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-import": "^2.23.4",
+    "eslint-plugin-jsx-a11y": "^6.4.1",
+    "eslint-plugin-react": "^7.24.0",
+    "eslint-plugin-react-hooks": "^4.2.0",
+    "jest": "^26.6.0",
+    "babel-jest": "^26.6.3",
+    "babel-preset-react-app": "^10.0.0"
+  },
+  "resolutions": {
+    "jest": "26.6.0"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test --env=jsdom",
+    "eject": "react-scripts eject",
+    "lint": "eslint src/**/*.ts src/**/*.tsx",
+    "lint:fix": "eslint src/**/*.ts src/**/*.tsx --fix"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "airbnb",
+      "prettier"
+    ],
+    "rules": {
+      "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx", ".ts", ".tsx"] }]
+    }
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  }
+}
