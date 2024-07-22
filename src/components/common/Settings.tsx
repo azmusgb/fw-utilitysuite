@@ -12,7 +12,10 @@ const Settings: React.FC = () => {
   });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-    const { name, value, type, checked } = e.target;
+    const target = e.target as HTMLInputElement;
+    const { name, value, type } = target;
+    const checked = target.checked;
+
     setSettings((prevSettings) => ({
       ...prevSettings,
       [name]: type === 'checkbox' ? checked : value,
