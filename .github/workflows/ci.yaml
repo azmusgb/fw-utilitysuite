@@ -64,11 +64,6 @@ jobs:
         run: |
           rm -rf node_modules package-lock.json
 
-      - name: Force install specific jest version
-        shell: bash
-        run: |
-          npm install jest@26.6.0
-
       - name: Install dependencies without cache
         shell: bash
         run: |
