@@ -1,13 +1,14 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
+import { BrowserRouter } from 'react-router-dom';
 import App from '../App';
-import { BrowserRouter as Router } from 'react-router-dom';
 
-test('renders App component', () => {
+test('renders learn react link', () => {
   render(
-    <Router>
+    <BrowserRouter>
       <App />
-    </Router>
+    </BrowserRouter>
   );
-  expect(screen.getByText(/FW Utility Suite/i)).toBeInTheDocument();
+  const linkElement = screen.getByText(/welcome to fw utility suite/i);
+  expect(linkElement).toBeInTheDocument();
 });
