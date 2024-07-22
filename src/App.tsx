@@ -1,13 +1,36 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FormWorks Agent Service Script</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-</head>
-<body>
-    <div id="root"></div>
-    <script src="../build/static/js/bundle.js"></script>
-</body>
-</html>
+import React, { lazy, Suspense } from 'react';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import './App.css';
+import Header from './components/common/Header';
+import Navigation from './components/common/Navigation';
+
+const Home = lazy(() => import('./components/Home'));
+const Tools = lazy(() => import('./components/Tools'));
+const FAQ = lazy(() => import('./components/FAQ'));
+const Settings = lazy(() => import('./components/Settings'));
+
+/**
+ * The main App component which includes routing and common layout components.
+ * 
+ * @returns {JSX.Element} The rendered App component.
+ */
+const App: React.FC = () => {
+  return (
+    <Router>
+      <div className="App">
+        <Header />
+        <Navigation />
+        <Suspense fallback={<div>Loading...</div>}>
+          <Switch>
+            <Route path="/" exact component={Home} />
+            <Route path="/tools" component={Tools} />
+            <Route path="/faq" component={FAQ} />
+            <Route path="/settings" component={Settings} />
+          </Switch>
+        </Suspense>
+      </div>
+    </Router>
+  );
+};
+
+export default App;
