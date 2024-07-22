@@ -55,15 +55,6 @@ jobs:
         with:
           node-version: '20'
 
-      - name: Cache Node.js modules
-        id: cache
-        uses: actions/cache@v3
-        with:
-          path: ~/.npm
-          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}-${{ hashFiles('**/package.json') }}
-          restore-keys: |
-            ${{ runner.os }}-node-
-
       - name: Clear npm cache
         shell: bash
         run: npm cache clean --force
@@ -73,7 +64,7 @@ jobs:
         run: |
           rm -rf node_modules package-lock.json
 
-      - name: Install dependencies
+      - name: Install dependencies without cache
         shell: bash
         run: |
           npm install
