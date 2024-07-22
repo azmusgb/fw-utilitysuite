@@ -5,6 +5,17 @@ import ServiceCard from './ServiceCard';
 import Feedback from './Feedback';
 import { environmentServers, serviceSuffixes, showFeedback } from '../utils';
 
+const Container = styled.div`
+  .loading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    .loading-spinner {
+      margin-right: 10px;
+    }
+  }
+`;
+
 const QueryForm: React.FC = () => {
   const [results, setResults] = useState<JSX.Element[]>([]);
   const [loading, setLoading] = useState(false);
@@ -37,7 +48,7 @@ const QueryForm: React.FC = () => {
   };
 
   return (
-    <div>
+    <Container>
       <form id="queryForm" aria-label="Query Form" onSubmit={queryServices}>
         <label htmlFor="environment">Environment:</label>
         <select id="environment" name="environment" aria-label="Environment">
@@ -57,7 +68,7 @@ const QueryForm: React.FC = () => {
         </div>
       )}
       <Feedback message={feedback.message} type={feedback.type} />
-    </div>
+    </Container>
   );
 };
 
