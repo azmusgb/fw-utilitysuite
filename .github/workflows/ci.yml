@@ -24,7 +24,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '18'
+          node-version: '20'
 
       - name: Cache Node.js modules
         id: cache
@@ -55,7 +55,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '18'
+          node-version: '20'
 
       - name: Restore cache
         uses: actions/cache@v3
@@ -85,7 +85,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '18'
+          node-version: '20'
 
       - name: Restore cache
         uses: actions/cache@v3
@@ -97,4 +97,51 @@ jobs:
 
       - name: Build
         run: |
-          echo "##[
+          echo "##[debug] Building the project"
+          npm run build
+          echo "##[debug] Build completed"
+
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: build-artifacts
+          path: build
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build
+    env:
+      ACTIONS_RUNNER_DEBUG: true
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'
+
+      - name: Restore cache
+        uses: actions/cache@v3
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+      - name: Configure Git
+        run: |
+          echo "##[debug] Configuring Git"
+          git config --global user.email "wjrahe@gmail.com"
+          git config --global user.name "William Rahe"
+          echo "##[debug] Git configuration complete"
+
+      - name: Deploy to GitHub Pages
+        run: |
+          echo "##[debug] Deploying to GitHub Pages"
+          npm run deploy
+          echo "##[debug] Deployment to GitHub Pages completed"
+        env:
+          GITHUB_TOKEN: ${{ secrets.ACTIONS_DEPLOY_KEY }}
