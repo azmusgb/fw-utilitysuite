@@ -8,7 +8,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  install:
+  ci:
     runs-on: ubuntu-latest
     container:
       image: node:20
@@ -92,12 +92,7 @@ jobs:
             retry npm install
           fi
           echo "##[debug] Dependencies installed"
-        env:
-          CI: true
-
-      - name: List installed packages
-        shell: bash
-        run: npm list --depth=0
+          npm list --depth=0
 
       - name: Show npm debug log if install fails
         if: failure()
@@ -109,73 +104,12 @@ jobs:
             echo "No npm debug log found"
           fi
 
-      - name: Workflow runs delete
-        uses: InfraWay/delete-workflow-runs@v2.1.2
-        with:
-          retain_days: 1
-
-      - name: Install essential tools
-        shell: bash
-        run: |
-          apt-get update
-          apt-get install -y tar git
-
-      - name: Verify tar installation
-        shell: bash
-        run: which tar
-
-      - name: Checkout repository
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-
-      - name: Set up Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: '20'
-
-      - name: Restore cache
-        uses: actions/cache@v3
-        with:
-          path: ~/.npm
-          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}-${{ hashFiles('**/package.json') }}
-          restore-keys: |
-            ${{ runner.os }}-node-
-
       - name: Run tests
         shell: bash
         run: |
           echo "##[debug] Running tests"
           npm test
           echo "##[debug] Tests completed"
-
-      - name: Install essential tools
-        shell: bash
-        run: |
-          apt-get update
-          apt-get install -y tar git
-
-      - name: Verify tar installation
-        shell: bash
-        run: which tar
-
-      - name: Checkout repository
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-
-      - name: Set up Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: '20'
-
-      - name: Restore cache
-        uses: actions/cache@v3
-        with:
-          path: ~/.npm
-          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}-${{ hashFiles('**/package.json') }}
-          restore-keys: |
-            ${{ runner.os }}-node-
 
       - name: Build
         shell: bash
@@ -189,34 +123,6 @@ jobs:
         with:
           name: build-artifacts
           path: build
-
-      - name: Install essential tools
-        shell: bash
-        run: |
-          apt-get update
-          apt-get install -y tar git
-
-      - name: Verify tar installation
-        shell: bash
-        run: which tar
-
-      - name: Checkout repository
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-
-      - name: Set up Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: '20'
-
-      - name: Restore cache
-        uses: actions/cache@v3
-        with:
-          path: ~/.npm
-          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}-${{ hashFiles('**/package.json') }}
-          restore-keys: |
-            ${{ runner.os }}-node-
 
       - name: Configure Git
         shell: bash
