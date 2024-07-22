@@ -1,4 +1,3 @@
-
 import React from 'react';
 
 const FAQ = () => (
@@ -23,7 +22,7 @@ const FAQ = () => (
       <p><strong>How do I adjust the font size in the application?</strong><br />
         In the Settings tab, select the 'Font Size' dropdown menu.
         Choose from 'Default', 'Large', or 'Larger' to set the font size that best suits your viewing preference.</p>
-      <h3>Additional support?</h3>
+      <h3>Additional support</h3>
       <p><strong>How do I find additional support?</strong><br />
         Visit our Confluence site for more information and support on these tools and other details.</p>
     </div>
