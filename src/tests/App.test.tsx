@@ -1,14 +1,9 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
-import { BrowserRouter } from 'react-router-dom';
 import App from '../App';
 
 test('renders FormWorks Agent Service Script text', () => {
-  render(
-    <BrowserRouter>
-      <App />
-    </BrowserRouter>
-  );
+  render(<App />);
   const linkElement = screen.getByText(/FormWorks Agent Service Script/i);
   expect(linkElement).toBeInTheDocument();
 });
