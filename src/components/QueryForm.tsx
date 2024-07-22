@@ -144,7 +144,7 @@ const QueryForm: React.FC = () => {
       </form>
       <input type="text" id="searchInput" placeholder="Search..." aria-label="Search" onInput={searchCards} />
       <div id="results"></div>
-      <div id="loading" className="loading" style={{ display: 'none' }}>
+            <div id="loading" className="loading" style={{ display: 'none' }}>
         <div className="loading-spinner"></div>
         <p>Loading...</p>
       </div>
