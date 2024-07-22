@@ -62,9 +62,9 @@ const createServiceCard = (server: string, serviceName: string, serviceStatus: s
 const initCollapsibles = () => {
   const coll = document.getElementsByClassName("collapsible");
   for (let i = 0; i < coll.length; i++) {
-    coll[i].addEventListener("click", function () {
+    coll[i].addEventListener("click", function (this: HTMLElement) {
       this.classList.toggle("active");
-      const content = this.nextElementSibling;
+      const content = this.nextElementSibling as HTMLElement;
       if (content.style.maxHeight) {
         content.style.maxHeight = null;
       } else {
