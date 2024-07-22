@@ -1,9 +1,9 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
-import Header from '../components/Header'; // Adjust path if necessary
+import Header from '../components/Header';
 
-test('renders FormWorks Agent Service Script header', () => {
+test('renders FormWorks Utility Suite header', () => {
   render(<Header />);
-  const headerElement = screen.getByText(/FormWorks Agent Service Script/i);
+  const headerElement = screen.getByText(/FormWorks Utility Suite/i);
   expect(headerElement).toBeInTheDocument();
 });
