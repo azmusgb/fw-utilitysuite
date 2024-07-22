@@ -16,6 +16,11 @@ jobs:
       - name: Enable debug logging
         run: echo "##[debug] Debug logging is enabled"
 
+      - name: Install essential tools
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y tar git
+
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
@@ -54,6 +59,11 @@ jobs:
       - name: Show npm debug log if install fails
         if: failure()
         run: cat ~/.npm/_logs/*.log
+
+      - name: Workflow runs delete
+        uses: InfraWay/delete-workflow-runs@v2.1.2
+        with:
+          retain_days: 1      
 
   test:
     runs-on: ubuntu-latest
