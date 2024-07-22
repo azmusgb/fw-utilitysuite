@@ -11,7 +11,7 @@ jobs:
   install:
     runs-on: ubuntu-latest
     container:
-      image: ubuntu:latest
+      image: node:20
     env:
       ACTIONS_RUNNER_DEBUG: true
     steps:
@@ -19,13 +19,11 @@ jobs:
         run: echo "##[debug] Debug logging is enabled"
 
       - name: Install essential tools
-        shell: bash
         run: |
           apt-get update
           apt-get install -y tar git
 
       - name: Verify tar and git installation
-        shell: bash
         run: |
           which tar
           tar --version
@@ -64,7 +62,6 @@ jobs:
             ${{ runner.os }}-node-
 
       - name: Install dependencies
-        shell: bash
         run: |
           if [ -f package-lock.json ]; then
             echo "##[debug] Installing dependencies using npm ci"
@@ -78,12 +75,10 @@ jobs:
           CI: true
 
       - name: List installed packages
-        shell: bash
         run: npm list --depth=0
 
       - name: Show npm debug log if install fails
         if: failure()
-        shell: bash
         run: |
           if [ -f ~/.npm/_logs/*.log ]; then
             cat ~/.npm/_logs/*.log
@@ -99,20 +94,18 @@ jobs:
   test:
     runs-on: ubuntu-latest
     container:
-      image: ubuntu:latest
+      image: node:20
     needs: install
     env:
       ACTIONS_RUNNER_DEBUG: true
       PATH: node_modules/.bin:$PATH
     steps:
       - name: Install essential tools
-        shell: bash
         run: |
           apt-get update
           apt-get install -y tar git
 
       - name: Verify tar installation
-        shell: bash
         run: which tar
 
       - name: Checkout repository
@@ -134,7 +127,6 @@ jobs:
             ${{ runner.os }}-node-
 
       - name: Run tests
-        shell: bash
         run: |
           echo "##[debug] Running tests"
           npm test
@@ -143,19 +135,17 @@ jobs:
   build:
     runs-on: ubuntu-latest
     container:
-      image: ubuntu:latest
+      image: node:20
     needs: test
     env:
       ACTIONS_RUNNER_DEBUG: true
     steps:
       - name: Install essential tools
-        shell: bash
         run: |
           apt-get update
           apt-get install -y tar git
 
       - name: Verify tar installation
-        shell: bash
         run: which tar
 
       - name: Checkout repository
@@ -177,7 +167,6 @@ jobs:
             ${{ runner.os }}-node-
 
       - name: Build
-        shell: bash
         run: |
           echo "##[debug] Building the project"
           npm run build
@@ -192,19 +181,17 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     container:
-      image: ubuntu:latest
+      image: node:20
     needs: build
     env:
       ACTIONS_RUNNER_DEBUG: true
     steps:
       - name: Install essential tools
-        shell: bash
         run: |
           apt-get update
           apt-get install -y tar git
 
       - name: Verify tar installation
-        shell: bash
         run: which tar
 
       - name: Checkout repository
@@ -226,7 +213,6 @@ jobs:
             ${{ runner.os }}-node-
 
       - name: Configure Git
-        shell: bash
         run: |
           echo "##[debug] Configuring Git"
           git config --global user.email "wjrahe@gmail.com"
@@ -234,7 +220,6 @@ jobs:
           echo "##[debug] Git configuration complete"
 
       - name: Deploy to GitHub Pages
-        shell: bash
         run: |
           echo "##[debug] Deploying to GitHub Pages"
           npm run deploy
