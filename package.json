@@ -15,7 +15,7 @@
     "chart.js": "^4.2.1",
     "react-chartjs-2": "^5.2.0",
     "@jridgewell/sourcemap-codec": "^1.4.10",
-    "@rollup/plugin-terser": "latesr"
+    "@rollup/plugin-terser": "latest"
   },
   "devDependencies": {
     "@babel/plugin-transform-private-methods": "^7.21.11",
