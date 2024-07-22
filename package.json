@@ -4,29 +4,29 @@
   "private": true,
   "homepage": "https://azmusgb.github.io/fw-utilitysuite",
   "dependencies": {
-    "@testing-library/jest-dom": "latest",
-    "@testing-library/react": "latest",
-    "@testing-library/user-event": "latest",
-    "react": "latest",
-    "react-dom": "latest",
-    "react-router-dom": "latest",
-    "react-scripts": "latest",
-    "web-vitals": "latest",
-    "chart.js": "latest",
-    "react-chartjs-2": "latest",
-    "@jridgewell/sourcemap-codec": "latest",
-    "@rollup/plugin-terser": "latest",
-    "styled-components": "latest"
+    "@testing-library/jest-dom": "^5.16.5",
+    "@testing-library/react": "^14.0.0",
+    "@testing-library/user-event": "^14.4.3",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-router-dom": "^6.14.0",
+    "react-scripts": "^5.0.1",
+    "web-vitals": "^3.1.0",
+    "chart.js": "^4.2.1",
+    "react-chartjs-2": "^5.2.0",
+    "@jridgewell/sourcemap-codec": "^1.4.10",
+    "@rollup/plugin-terser": "^0.3.10",
+    "styled-components": "^5.3.10"
   },
   "devDependencies": {
-    "@babel/plugin-transform-private-methods": "latest",
-    "@babel/plugin-transform-numeric-separator": "latest",
-    "@babel/plugin-transform-nullish-coalescing-operator": "latest",
-    "@babel/plugin-transform-class-properties": "latest",
-    "@babel/plugin-transform-optional-chaining": "latest",
-    "@babel/plugin-transform-private-property-in-object": "latest",
-    "@types/styled-components": "^latest",
-    "gh-pages": latest"
+    "@babel/plugin-transform-private-methods": "^7.21.0",
+    "@babel/plugin-transform-numeric-separator": "^7.21.0",
+    "@babel/plugin-transform-nullish-coalescing-operator": "^7.21.0",
+    "@babel/plugin-transform-class-properties": "^7.21.0",
+    "@babel/plugin-transform-optional-chaining": "^7.21.0",
+    "@babel/plugin-transform-private-property-in-object": "^7.21.0",
+    "@types/styled-components": "^5.1.26",
+    "gh-pages": "^5.0.0"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -34,7 +34,7 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "predeploy": "npm run build",
-    "deploy": "gh-pages -d build"
+    "deploy": "gh-pages -d build --repo https://x-access-token:${GITHUB_TOKEN}@github.com/azmusgb/fw-utilitysuite.git"
   },
   "eslintConfig": {
     "extends": [
