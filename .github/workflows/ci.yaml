@@ -1,0 +1,220 @@
+name: CI Pipeline
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
+  workflow_dispatch:
+
+jobs:
+  install:
+    runs-on: ubuntu-latest
+    env:
+      ACTIONS_RUNNER_DEBUG: true
+    steps:
+      - name: Enable debug logging
+        run: echo "##[debug] Debug logging is enabled"
+
+      - name: Install essential tools
+        run: |
+          apt-get update
+          apt-get install -y tar git
+
+      - name: Verify tar and git installation
+        run: |
+          which tar
+          tar --version
+          which git
+          git --version
+
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          repository: azmusgb/fw-utilitysuite
+          token: ${{ secrets.GITHUB_TOKEN }}
+          ssh-strict: true
+          ssh-user: git
+          persist-credentials: true
+          clean: true
+          sparse-checkout-cone-mode: true
+          fetch-tags: false
+          show-progress: true
+          lfs: false
+          submodules: false
+          set-safe-directory: true
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'
+
+      - name: Cache Node.js modules
+        id: cache
+        uses: actions/cache@v3
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}-${{ hashFiles('**/package.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+      - name: Install dependencies
+        run: |
+          if [ -f package-lock.json ]; then
+            echo "##[debug] Installing dependencies using npm ci"
+            npm ci
+          else
+            echo "##[debug] Installing dependencies using npm install"
+            npm install
+          fi
+          echo "##[debug] Dependencies installed"
+        env:
+          CI: true
+
+      - name: List installed packages
+        run: npm list --depth=0
+
+      - name: Show npm debug log if install fails
+        if: failure()
+        run: |
+          if [ -f ~/.npm/_logs/*.log ]; then
+            cat ~/.npm/_logs/*.log
+          else
+            echo "No npm debug log found"
+          fi
+
+      - name: Workflow runs delete
+        uses: InfraWay/delete-workflow-runs@v2.1.2
+        with:
+          retain_days: 1
+
+  test:
+    runs-on: ubuntu-latest
+    needs: install
+    env:
+      ACTIONS_RUNNER_DEBUG: true
+      PATH: node_modules/.bin:$PATH
+    steps:
+      - name: Install essential tools
+        run: |
+          apt-get update
+          apt-get install -y tar git
+
+      - name: Verify tar installation
+        run: which tar
+
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'
+
+      - name: Restore cache
+        uses: actions/cache@v3
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}-${{ hashFiles('**/package.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+      - name: Run tests
+        run: |
+          echo "##[debug] Running tests"
+          npm test
+          echo "##[debug] Tests completed"
+
+  build:
+    runs-on: ubuntu-latest
+    needs: test
+    env:
+      ACTIONS_RUNNER_DEBUG: true
+    steps:
+      - name: Install essential tools
+        run: |
+          apt-get update
+          apt-get install -y tar git
+
+      - name: Verify tar installation
+        run: which tar
+
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'
+
+      - name: Restore cache
+        uses: actions/cache@v3
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}-${{ hashFiles('**/package.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+      - name: Build
+        run: |
+          echo "##[debug] Building the project"
+          npm run build
+          echo "##[debug] Build completed"
+
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: build-artifacts
+          path: build
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build
+    env:
+      ACTIONS_RUNNER_DEBUG: true
+    steps:
+      - name: Install essential tools
+        run: |
+          apt-get update
+          apt-get install -y tar git
+
+      - name: Verify tar installation
+        run: which tar
+
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'
+
+      - name: Restore cache
+        uses: actions/cache@v3
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}-${{ hashFiles('**/package.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+      - name: Configure Git
+        run: |
+          echo "##[debug] Configuring Git"
+          git config --global user.email "wjrahe@gmail.com"
+          git config --global user.name "William Rahe"
+          echo "##[debug] Git configuration complete"
+
+      - name: Deploy to GitHub Pages
+        run: |
+          echo "##[debug] Deploying to GitHub Pages"
+          npm run deploy
+          echo "##[debug] Deployment to GitHub Pages completed"
+        env:
+          GITHUB_TOKEN: ${{ secrets.ACTIONS_DEPLOY_KEY }}
