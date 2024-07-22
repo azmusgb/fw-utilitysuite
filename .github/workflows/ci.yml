@@ -18,8 +18,8 @@ jobs:
 
       - name: Install essential tools
         run: |
-          sudo apt-get update
-          sudo apt-get install -y tar git
+          apt-get update
+          apt-get install -y tar git
 
       - name: Verify tar and git installation
         run: |
@@ -93,8 +93,8 @@ jobs:
     steps:
       - name: Install essential tools
         run: |
-          sudo apt-get update
-          sudo apt-get install -y tar git
+          apt-get update
+          apt-get install -y tar git
 
       - name: Verify tar installation
         run: which tar
@@ -131,8 +131,8 @@ jobs:
     steps:
       - name: Install essential tools
         run: |
-          sudo apt-get update
-          sudo apt-get install -y tar git
+          apt-get update
+          apt-get install -y tar git
 
       - name: Verify tar installation
         run: which tar
@@ -175,8 +175,8 @@ jobs:
     steps:
       - name: Install essential tools
         run: |
-          sudo apt-get update
-          sudo apt-get install -y tar git
+          apt-get update
+          apt-get install -y tar git
 
       - name: Verify tar installation
         run: which tar
