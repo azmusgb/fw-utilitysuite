@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import Header from './components/Header';
 import ConfigUpload from './components/ConfigUpload';
 import DCNCreation from './components/DCNCreation';
@@ -12,23 +12,22 @@ import Chart from './components/Chart';
 
 const App: React.FC = () => {
   return (
-    <BrowserRouter>
+    <Router>
       <div className="App">
         <Header />
         <nav className="top-nav" id="mainNav">
-          <a className="" href="#!">Service Status</a>
-          <a className="" href="#!">Config Upload</a>
-          <a className="" href="#!">SAT Command</a>
-          <a className="" href="#!">History Retrieval</a>
-          <a className="" href="#!">DLTAFWC2 Preparation</a>
-          <a className="" href="#!">SavedWRs Archive Retrieval</a>
-          <a className="" href="#!">Tools</a>
-          <a className="" href="#!">FAQs</a>
-          <a className="" href="#!">Settings</a>
-          <a className="" href="#!">Service Chart</a>
+          <a href="#!">Service Status</a>
+          <a href="#!">Config Upload</a>
+          <a href="#!">SAT Command</a>
+          <a href="#!">History Retrieval</a>
+          <a href="#!">DLTAFWC2 Preparation</a>
+          <a href="#!">SavedWRs Archive Retrieval</a>
+          <a href="#!">Tools</a>
+          <a href="#!">FAQs</a>
+          <a href="#!">Settings</a>
+          <a href="#!">Service Chart</a>
         </nav>
         <div className="container">
-          <h1>FormWorks Agent Service Script</h1>
           <Switch>
             <Route path="/" exact component={Home} />
             <Route path="/config-upload" component={ConfigUpload} />
@@ -41,7 +40,7 @@ const App: React.FC = () => {
           </Switch>
         </div>
       </div>
-    </BrowserRouter>
+    </Router>
   );
 };
 
