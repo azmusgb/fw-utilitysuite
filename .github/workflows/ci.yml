@@ -25,12 +25,12 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      
+
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
           node-version: '20'
-      
+
       - name: Cache Node.js modules
         id: cache
         uses: actions/cache@v3
@@ -63,7 +63,7 @@ jobs:
       - name: Workflow runs delete
         uses: InfraWay/delete-workflow-runs@v2.1.2
         with:
-          retain_days: 1      
+          retain_days: 0
 
   test:
     runs-on: ubuntu-latest
