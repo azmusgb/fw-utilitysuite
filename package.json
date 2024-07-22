@@ -1,57 +1,142 @@
-{
-  "name": "formworks-utility-suite",
-  "version": "0.1.0",
-  "private": true,
-  "homepage": "https://azmusgb.github.io/fw-utilitysuite",
-  "dependencies": {
-    "@testing-library/jest-dom": "^5.16.5",
-    "@testing-library/react": "^14.0.0",
-    "@testing-library/user-event": "^14.4.3",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "react-router-dom": "^6.14.0",
-    "react-scripts": "^5.0.1",
-    "web-vitals": "^3.1.0",
-    "chart.js": "^4.2.1",
-    "react-chartjs-2": "^5.2.0",
-    "@jridgewell/sourcemap-codec": "^1.4.10",
-    "@rollup/plugin-terser": "latest",
-    "styled-components": "^5.3.10"
-  },
-  "devDependencies": {
-    "@babel/plugin-transform-private-methods": "^7.21.0",
-    "@babel/plugin-transform-numeric-separator": "^7.21.0",
-    "@babel/plugin-transform-nullish-coalescing-operator": "^7.21.0",
-    "@babel/plugin-transform-class-properties": "^7.21.0",
-    "@babel/plugin-transform-optional-chaining": "^7.21.0",
-    "@babel/plugin-transform-private-property-in-object": "^7.21.0",
-    "@types/styled-components": "^5.1.26",
-    "gh-pages": "^5.0.0"
-  },
-  "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject",
-    "predeploy": "npm run build",
-    "deploy": "gh-pages -d build --repo https://x-access-token:${GITHUB_TOKEN}@github.com/azmusgb/fw-utilitysuite.git"
-  },
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ]
-  },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
-  }
-}
+name: CI Pipeline
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
+  workflow_dispatch:
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    container:
+      image: node:20
+    env:
+      ACTIONS_RUNNER_DEBUG: true
+      CI: true
+    steps:
+      - name: Enable debug logging
+        run: echo "##[debug] Debug logging is enabled"
+
+      - name: Install essential tools
+        shell: bash
+        run: |
+          apt-get update
+          apt-get install -y tar git
+
+      - name: Verify tar and git installation
+        shell: bash
+        run: |
+          which tar
+          tar --version
+          which git
+          git --version
+
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          repository: azmusgb/fw-utilitysuite
+          token: ${{ secrets.GITHUB_TOKEN }}
+          ssh-strict: true
+          ssh-user: git
+          persist-credentials: true
+          clean: true
+          sparse-checkout-cone-mode: true
+          fetch-tags: false
+          show-progress: true
+          lfs: false
+          submodules: false
+          set-safe-directory: true
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'
+
+      - name: Cache Node.js modules
+        id: cache
+        uses: actions/cache@v3
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}-${{ hashFiles('**/package.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+      - name: Install dependencies
+        shell: bash
+        run: |
+          retry() {
+            local n=1
+            local max=5
+            local delay=5
+            while true; do
+              "$@" && break || {
+                if [[ $n -lt $max ]]; then
+                  ((n++))
+                  echo "Command failed. Attempt $n/$max:"
+                  sleep $delay;
+                else
+                  echo "The command has failed after $n attempts."
+                  return 1
+                fi
+              }
+            done
+          }
+          if [ -f package-lock.json ]; then
+            echo "##[debug] Installing dependencies using npm ci"
+            retry npm ci
+          else
+            echo "##[debug] Installing dependencies using npm install"
+            retry npm install
+          fi
+          echo "##[debug] Dependencies installed"
+          npm list --depth=0
+
+      - name: Show npm debug log if install fails
+        if: failure()
+        shell: bash
+        run: |
+          if [ -f ~/.npm/_logs/*.log ]; then
+            cat ~/.npm/_logs/*.log
+          else
+            echo "No npm debug log found"
+          fi
+
+      - name: Run tests
+        shell: bash
+        run: |
+          echo "##[debug] Running tests"
+          npm test
+          echo "##[debug] Tests completed"
+
+      - name: Build
+        shell: bash
+        run: |
+          echo "##[debug] Building the project"
+          npm run build
+          echo "##[debug] Build completed"
+
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: build-artifacts
+          path: build
+
+      - name: Configure Git
+        shell: bash
+        run: |
+          echo "##[debug] Configuring Git"
+          git config --global user.email "wjrahe@gmail.com"
+          git config --global user.name "William Rahe"
+          echo "##[debug] Git configuration complete"
+
+      - name: Deploy to GitHub Pages
+        shell: bash
+        run: |
+          echo "##[debug] Deploying to GitHub Pages"
+          npm run deploy
+          echo "##[debug] Deployment to GitHub Pages completed"
+        env:
+          GITHUB_TOKEN: ${{ secrets.ACTIONS_DEPLOY_KEY }}
