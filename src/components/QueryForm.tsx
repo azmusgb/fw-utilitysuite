@@ -4,7 +4,6 @@ import { Environment } from '../types';
 import ServiceCard from './ServiceCard';
 import Feedback from './Feedback';
 import { environmentServers, serviceSuffixes, showFeedback } from '../utils';
-import SearchComponent from './SearchComponent';
 
 const QueryForm: React.FC = () => {
   const [results, setResults] = useState<JSX.Element[]>([]);
