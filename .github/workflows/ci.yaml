@@ -10,6 +10,8 @@ on:
 jobs:
   install:
     runs-on: ubuntu-latest
+    container:
+      image: ubuntu:latest
     env:
       ACTIONS_RUNNER_DEBUG: true
     steps:
@@ -91,6 +93,8 @@ jobs:
 
   test:
     runs-on: ubuntu-latest
+    container:
+      image: ubuntu:latest
     needs: install
     env:
       ACTIONS_RUNNER_DEBUG: true
@@ -130,6 +134,8 @@ jobs:
 
   build:
     runs-on: ubuntu-latest
+    container:
+      image: ubuntu:latest
     needs: test
     env:
       ACTIONS_RUNNER_DEBUG: true
@@ -174,6 +180,8 @@ jobs:
 
   deploy:
     runs-on: ubuntu-latest
+    container:
+      image: ubuntu:latest
     needs: build
     env:
       ACTIONS_RUNNER_DEBUG: true
