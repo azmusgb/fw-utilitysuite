@@ -70,7 +70,7 @@ const initCollapsibles = () => {
       } else {
         content.style.maxHeight = content.scrollHeight + "px";
       }
-    });
+    } as EventListener);
   }
 };
 
