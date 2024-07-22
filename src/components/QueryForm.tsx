@@ -118,11 +118,12 @@ const queryServices = () => {
 
 const searchCards = (event: React.ChangeEvent<HTMLInputElement>) => {
   const searchTerm = event.target.value.toLowerCase();
-  const cards = Array.from(document.getElementsByClassName('card') as HTMLCollectionOf<HTMLElement>);
+  const cards = Array.from(document.getElementsByClassName('card'));
 
   for (let card of cards) {
-    const cardText = card.textContent?.toLowerCase() || '';
-    card.style.display = cardText.includes(searchTerm) ? '' : 'none';
+    const cardElement = card as HTMLElement;
+    const cardText = cardElement.textContent?.toLowerCase() || '';
+    cardElement.style.display = cardText.includes(searchTerm) ? '' : 'none';
   }
 };
 
