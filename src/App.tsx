@@ -1,38 +1,31 @@
-import React, { lazy, Suspense } from 'react';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import './App.css';
+import React from 'react';
+import { ThemeProvider } from 'styled-components';
+import { GlobalStyle } from './styles';
+import theme from './theme';
 import Header from './components/common/Header';
-import Navigation from './components/common/Navigation';
+import Footer from './components/common/Footer';
+import MainContent from './components/common/MainContent';
+import DarkModeToggle from './components/DarkModeToggle';
+import SearchComponent from './components/SearchComponent';
+import QueryForm from './components/QueryForm';
+import UploadForm from './components/UploadForm';
+import ResultsComponent from './components/ResultsComponent';
 
-const Home = lazy(() => import('./components/Home'));
-const Tools = lazy(() => import('./components/Tools'));
-const FAQ = lazy(() => import('./components/FAQ'));
-const Settings = lazy(() => import('./components/Settings'));
-
-/**
- * The main App component which includes routing and common layout components.
- * 
- * @returns {JSX.Element} The rendered App component.
- */
 const App: React.FC = () => {
   return (
-    <Router>
-      <div className="App">
-        <header className="App-header">
-          <h1>FormWorks Agent Service Script</h1>
-        </header>
-        <Header />
-        <Navigation />
-        <Suspense fallback={<div>Loading...</div>}>
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/tools" element={<Tools />} />
-            <Route path="/faq" element={<FAQ />} />
-            <Route path="/settings" element={<Settings />} />
-          </Routes>
-        </Suspense>
-      </div>
-    </Router>
+    <ThemeProvider theme={theme}>
+      <GlobalStyle />
+      <DarkModeToggle />
+      <Header />
+      <MainContent>
+        <h1>FormWorks Agent Service Script</h1>
+        <SearchComponent />
+        <QueryForm />
+        <UploadForm />
+        <ResultsComponent />
+      </MainContent>
+      <Footer />
+    </ThemeProvider>
   );
 };
 
