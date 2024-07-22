@@ -1,14 +1,15 @@
 import React, { useState } from 'react';
+import styled from 'styled-components';
 import { Environment } from '../types';
 import ServiceCard from './ServiceCard';
 import Feedback from './Feedback';
 import { environmentServers, serviceSuffixes, showFeedback } from '../utils';
+import SearchComponent from './SearchComponent';
 
 const QueryForm: React.FC = () => {
   const [results, setResults] = useState<JSX.Element[]>([]);
   const [loading, setLoading] = useState(false);
   const [feedback, setFeedback] = useState<{ message: string, type: string }>({ message: '', type: '' });
-  const [searchTerm, setSearchTerm] = useState('');
 
   const queryServices = (event: React.FormEvent) => {
     event.preventDefault();
@@ -36,16 +37,6 @@ const QueryForm: React.FC = () => {
     });
   };
 
-  const searchCards = (event: React.FormEvent<HTMLInputElement>) => {
-    const term = event.currentTarget.value.toLowerCase();
-    setSearchTerm(term);
-  };
-
-  const filteredResults = results.filter(result =>
-    result.props.server.toLowerCase().includes(searchTerm) ||
-    result.props.serviceName.toLowerCase().includes(searchTerm)
-  );
-
   return (
     <div>
       <form id="queryForm" aria-label="Query Form" onSubmit={queryServices}>
@@ -57,9 +48,9 @@ const QueryForm: React.FC = () => {
         </select>
         <button type="submit">Query</button>
       </form>
-      <input type="text" id="searchInput" placeholder="Search..." aria-label="Search" onInput={searchCards} />
+      <SearchComponent />
       <div id="results">
-        {filteredResults}
+        {results}
       </div>
       {loading && (
         <div id="loading" className="loading">
