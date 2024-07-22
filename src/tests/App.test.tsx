@@ -3,12 +3,12 @@ import { render, screen } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
 import App from '../App';
 
-test('renders learn react link', () => {
+test('renders FormWorks Agent Service Script text', () => {
   render(
     <BrowserRouter>
       <App />
     </BrowserRouter>
   );
-  const linkElement = screen.getByText(/welcome to fw utility suite/i);
+  const linkElement = screen.getByText(/FormWorks Agent Service Script/i);
   expect(linkElement).toBeInTheDocument();
 });
