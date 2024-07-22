@@ -73,11 +73,6 @@ jobs:
         run: |
           rm -rf node_modules package-lock.json
 
-      - name: Remove jest from package.json
-        shell: bash
-        run: |
-          sed -i '/"jest":/d' package.json
-
       - name: Install dependencies
         shell: bash
         run: |
