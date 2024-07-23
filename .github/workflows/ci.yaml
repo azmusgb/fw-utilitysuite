@@ -1,4 +1,5 @@
-name: CI
+```yaml
+name: CI/CD
 
 on:
   push:
@@ -7,79 +8,35 @@ on:
     branches: ["main"]
   workflow_dispatch:
 
+env:
+  NODE_VERSION: '20'
+
 jobs:
-  ci:
+  build-and-deploy:
     runs-on: ubuntu-latest
-    container:
-      image: node:20
-    env:
-      ACTIONS_RUNNER_DEBUG: true
-      CI: true
-      NODE_OPTIONS: "--openssl-legacy-provider"
+    
     steps:
-      - name: Enable debug logging
-        run: echo "##[debug] Debug logging is enabled"
-
-      - name: Install essential tools
-        run: |
-          apt-get update
-          apt-get install -y tar git
-
-      - name: Verify tar and git installation
-        run: |
-          which tar
-          tar --version
-          which git
-          git --version
-
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
           repository: azmusgb/fw-utilitysuite
-          token: ${{ secrets.ACTIONS_DEPLOY_KEY }}
+          token: ${{ secrets.GITHUB_TOKEN }}
           ssh-strict: true
-          ssh-user: git
           persist-credentials: true
           clean: true
-          sparse-checkout-cone-mode: true
-          fetch-tags: false
-          show-progress: true
-          lfs: false
-          submodules: false
-          set-safe-directory: true
 
-      - name: Set up Node.js
+      - name: Use Node.js ${{ env.NODE_VERSION }}
         uses: actions/setup-node@v3
         with:
-          node-version: '20'
-
-      - name: Clear npm cache
-        run: npm cache clean --force
-
-      - name: Remove node_modules and package-lock.json
-        run: |
-          rm -rf node_modules package-lock.json
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
 
       - name: Install dependencies
-        run: |
-          npm install
-          echo "##[debug] Dependencies installed"
-          npm list --depth=0
-
-      - name: Show npm debug log if install fails
-        if: failure()
-        run: |
-          if [ -f ~/.npm/_logs/*.log ]; then
-            cat ~/.npm/_logs/*.log
-          else
-            echo "No npm debug log found"
+        run: npm ci
 
       - name: Build
-        run: |
-          echo "##[debug] Building the project"
-          npm run build
-          echo "##[debug] Build completed"
+        run: npm run build
 
       - name: Upload build artifacts
         uses: actions/upload-artifact@v3
@@ -87,22 +44,14 @@ jobs:
           name: build-artifacts
           path: build
 
-      - name: Configure Git
-        run: |
-          echo "##[debug] Configuring Git"
-          git config --global user.email "wjrahe@gmail.com"
-          git config --global user.name "William Rahe"
-          echo "##[debug] Git configuration complete"
-
-      - name: Configure Git Safe Directory
-        run: |
-          git config --global --add safe.directory /__w/fw-utilitysuite/fw-utilitysuite
-
       - name: Deploy to GitHub Pages
-        env:
-          GITHUB_TOKEN: ${{ secrets.ACTIONS_DEPLOY_KEY }}
-        run: |
-          echo "##[debug] Deploying to GitHub Pages"
-          git remote set-url origin https://x-access-token:${{ secrets.ACTIONS_DEPLOY_KEY }}@github.com/azmusgb/fw-utilitysuite.git
-          npm run deploy
-          echo "##[debug] Deployment to GitHub Pages completed"
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./build
+          user_name: 'github-actions[bot]'
+          user_email: 'github-actions[bot]@users.noreply.github.com'
+          commit_message: ${{ github.event.head_commit.message }}
+
+```
