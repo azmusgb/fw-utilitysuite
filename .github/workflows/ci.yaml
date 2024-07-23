@@ -55,19 +55,19 @@ jobs:
           name: build-artifacts
           path: build
 
-      - name: Deploy to GitHub Pages
+      - name: Deploy to gh-pages
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          # Uncomment the next line and comment out the github_token line above if using a PAT
-          # personal_token: ${{ secrets.PAT_TOKEN }}
           publish_dir: ./build
+          publish_branch: gh-pages
           user_name: 'github-actions[bot]'
           user_email: 'github-actions[bot]@users.noreply.github.com'
           commit_message: ${{ github.event.head_commit.message }}
+          force_orphan: true
 
       - name: Display deployment status
         run: |
-          echo "Deployment completed"
+          echo "Deployment to gh-pages branch completed"
           echo "Check the 'github-pages' environment for the deployment URL"
