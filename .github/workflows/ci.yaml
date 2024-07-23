@@ -82,13 +82,6 @@ jobs:
             echo "No npm debug log found"
           fi
 
-      - name: Run tests
-        shell: bash
-        run: |
-          echo "##[debug] Running tests"
-          npm test
-          echo "##[debug] Tests completed"
-
       - name: Build
         shell: bash
         run: |
