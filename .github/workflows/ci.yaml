@@ -29,10 +29,14 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: ${{ env.NODE_VERSION }}
-          cache: 'npm'
 
-      - name: Install dependencies
-        run: npm ci
+      - name: Remove existing lock file
+        run: rm -f package-lock.json
+
+      - name: Install dependencies and create new lock file
+        run: |
+          npm install
+          npm ci
 
       - name: Build
         run: npm run build
@@ -52,4 +56,3 @@ jobs:
           user_name: 'github-actions[bot]'
           user_email: 'github-actions[bot]@users.noreply.github.com'
           commit_message: ${{ github.event.head_commit.message }}
-
