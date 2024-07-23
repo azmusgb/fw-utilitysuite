@@ -11,6 +11,11 @@ env:
   NODE_VERSION: '20'
   NODE_OPTIONS: '--openssl-legacy-provider'
 
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
@@ -55,7 +60,14 @@ jobs:
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
+          # Uncomment the next line and comment out the github_token line above if using a PAT
+          # personal_token: ${{ secrets.PAT_TOKEN }}
           publish_dir: ./build
           user_name: 'github-actions[bot]'
           user_email: 'github-actions[bot]@users.noreply.github.com'
           commit_message: ${{ github.event.head_commit.message }}
+
+      - name: Display deployment status
+        run: |
+          echo "Deployment completed"
+          echo "Check the 'github-pages' environment for the deployment URL"
