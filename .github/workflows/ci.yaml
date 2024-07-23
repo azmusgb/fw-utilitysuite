@@ -95,9 +95,11 @@ jobs:
           echo "##[debug] Git configuration complete"
 
       - name: Deploy to GitHub Pages
-        run: |
-          echo "##[debug] Deploying to GitHub Pages"
-          npm run deploy
-          echo "##[debug] Deployment to GitHub Pages completed"
         env:
           GITHUB_TOKEN: ${{ secrets.ACTIONS_DEPLOY_KEY }}
+        run: |
+          echo "##[debug] Deploying to GitHub Pages"
+          git remote set-url origin https://x-access-token:${{ secrets.ACTIONS_DEPLOY_KEY }}@github.com/azmusgb/fw-utilitysuite.git
+          npm run deploy
+          echo "##[debug] Deployment to GitHub Pages completed"
+
