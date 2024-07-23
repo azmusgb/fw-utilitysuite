@@ -1,5 +1,5 @@
 import React from 'react';
-import Header from './components/Header.tsx';
+import Header from './components/Header.tsx'; // Ensure the path and extension are correct
 
 function App() {
   return (
