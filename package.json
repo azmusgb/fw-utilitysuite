@@ -47,14 +47,16 @@
     "lint:fix": "eslint src/**/*.ts src/**/*.tsx --fix"
   },
   "eslintConfig": {
-    "extends": [
-      "react-app",
-      "airbnb",
-      "prettier"
-    ],
-    "rules": {
-      "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx", ".ts", ".tsx"] }]
-    }
+  "extends": [
+    "react-app",
+    "airbnb",
+    "prettier"
+  ],
+  "rules": {
+    "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx", ".ts", ".tsx"] }],
+    "no-use-before-define": ["off"],
+    "import/newline-after-import": ["off"]
+  }
   },
   "browserslist": {
     "production": [
