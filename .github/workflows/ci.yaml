@@ -1,3 +1,4 @@
+```yaml
 name: CI/CD
 
 on:
@@ -9,6 +10,7 @@ on:
 
 env:
   NODE_VERSION: '20'
+  NODE_OPTIONS: '--openssl-legacy-provider'
 
 jobs:
   build-and-deploy:
@@ -40,6 +42,8 @@ jobs:
 
       - name: Build
         run: npm run build
+        env:
+          NODE_OPTIONS: '--openssl-legacy-provider'
 
       - name: Upload build artifacts
         uses: actions/upload-artifact@v3
@@ -56,3 +60,5 @@ jobs:
           user_name: 'github-actions[bot]'
           user_email: 'github-actions[bot]@users.noreply.github.com'
           commit_message: ${{ github.event.head_commit.message }}
+
+```
