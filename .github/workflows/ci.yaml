@@ -70,4 +70,4 @@ jobs:
       - name: Display deployment status
         run: |
           echo "Deployment to gh-pages branch completed"
-          echo "Check the 'github-pages' environment for the deployment URL"
+          echo "Deployment URL: https://azmusgb.github.io/fw-utilitysuite/"
