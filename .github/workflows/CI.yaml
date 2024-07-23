@@ -1,0 +1,73 @@
+name: CI/CD
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
+  workflow_dispatch:
+
+env:
+  NODE_VERSION: '20'
+  NODE_OPTIONS: '--openssl-legacy-provider'
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          repository: azmusgb/fw-utilitysuite
+          token: ${{ secrets.GITHUB_TOKEN }}
+          ssh-strict: true
+          persist-credentials: true
+          clean: true
+
+      - name: Use Node.js ${{ env.NODE_VERSION }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Remove existing lock file
+        run: rm -f package-lock.json
+
+      - name: Install dependencies and create new lock file
+        run: |
+          npm install
+          npm ci
+
+      - name: Build
+        run: npm run build
+        env:
+          NODE_OPTIONS: '--openssl-legacy-provider'
+
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: build-artifacts
+          path: build
+
+      - name: Deploy to gh-pages
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./build
+          publish_branch: gh-pages
+          user_name: 'github-actions[bot]'
+          user_email: 'github-actions[bot]@users.noreply.github.com'
+          commit_message: ${{ github.event.head_commit.message }}
+          force_orphan: true
+
+      - name: Display deployment status
+        run: |
+          echo "Deployment to gh-pages branch completed"
+          echo "Check the 'github-pages' environment for the deployment URL"
