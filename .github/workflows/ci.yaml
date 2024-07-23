@@ -21,13 +21,11 @@ jobs:
         run: echo "##[debug] Debug logging is enabled"
 
       - name: Install essential tools
-        shell: bash
         run: |
           apt-get update
           apt-get install -y tar git
 
       - name: Verify tar and git installation
-        shell: bash
         run: |
           which tar
           tar --version
@@ -39,7 +37,7 @@ jobs:
         with:
           fetch-depth: 0
           repository: azmusgb/fw-utilitysuite
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.ACTIONS_DEPLOY_KEY }}
           ssh-strict: true
           ssh-user: git
           persist-credentials: true
@@ -57,16 +55,13 @@ jobs:
           node-version: '20'
 
       - name: Clear npm cache
-        shell: bash
         run: npm cache clean --force
 
       - name: Remove node_modules and package-lock.json
-        shell: bash
         run: |
           rm -rf node_modules package-lock.json
 
       - name: Install dependencies
-        shell: bash
         run: |
           npm install
           echo "##[debug] Dependencies installed"
@@ -74,7 +69,6 @@ jobs:
 
       - name: Show npm debug log if install fails
         if: failure()
-        shell: bash
         run: |
           if [ -f ~/.npm/_logs/*.log ]; then
             cat ~/.npm/_logs/*.log
@@ -82,7 +76,6 @@ jobs:
             echo "No npm debug log found"
 
       - name: Build
-        shell: bash
         run: |
           echo "##[debug] Building the project"
           npm run build
@@ -95,7 +88,6 @@ jobs:
           path: build
 
       - name: Configure Git
-        shell: bash
         run: |
           echo "##[debug] Configuring Git"
           git config --global user.email "wjrahe@gmail.com"
@@ -103,7 +95,6 @@ jobs:
           echo "##[debug] Git configuration complete"
 
       - name: Deploy to GitHub Pages
-        shell: bash
         run: |
           echo "##[debug] Deploying to GitHub Pages"
           npm run deploy
