@@ -1,5 +1,5 @@
 import React from 'react';
-import Header from './components/Header';
+import Header from './components/Header.tsx';  // Ensure correct extension
 // import ConfigUpload from './components/ConfigUpload'; // Uncomment if used
 // import DCNCreation from './components/DCNCreation'; // Uncomment if used
 // import FAQ from './components/FAQ'; // Uncomment if used
