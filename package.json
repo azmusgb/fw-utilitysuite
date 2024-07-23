@@ -47,7 +47,7 @@
     "lint": "eslint src/**/*.ts src/**/*.tsx",
     "lint:fix": "eslint src/**/*.ts src/**/*.tsx --fix",
     "predeploy": "npm run build",
-    "deploy": "gh-pages -d build"
+    "deploy": "gh-pages -d build -r https://github.com/azmusgb/fw-utilitysuite.git"
   },
   "eslintConfig": {
     "extends": [
