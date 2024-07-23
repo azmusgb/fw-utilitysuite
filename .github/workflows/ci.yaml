@@ -80,7 +80,6 @@ jobs:
             cat ~/.npm/_logs/*.log
           else
             echo "No npm debug log found"
-          fi
 
       - name: Build
         shell: bash
