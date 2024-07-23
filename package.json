@@ -32,7 +32,8 @@
     "eslint-plugin-react-hooks": "^4.2.0",
     "jest": "26.6.0",
     "babel-jest": "26.6.0",
-    "babel-preset-react-app": "^10.0.0"
+    "babel-preset-react-app": "^10.0.0",
+    "gh-pages": "^3.2.3"
   },
   "resolutions": {
     "jest": "26.6.0",
@@ -44,19 +45,21 @@
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
     "lint": "eslint src/**/*.ts src/**/*.tsx",
-    "lint:fix": "eslint src/**/*.ts src/**/*.tsx --fix"
+    "lint:fix": "eslint src/**/*.ts src/**/*.tsx --fix",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build"
   },
   "eslintConfig": {
-  "extends": [
-    "react-app",
-    "airbnb",
-    "prettier"
-  ],
-  "rules": {
-    "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx", ".ts", ".tsx"] }],
-    "no-use-before-define": ["off"],
-    "import/newline-after-import": ["off"]
-  }
+    "extends": [
+      "react-app",
+      "airbnb",
+      "prettier"
+    ],
+    "rules": {
+      "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx", ".ts", ".tsx"] }],
+      "no-use-before-define": ["off"],
+      "import/newline-after-import": ["off"]
+    }
   },
   "browserslist": {
     "production": [
