@@ -94,6 +94,10 @@ jobs:
           git config --global user.name "William Rahe"
           echo "##[debug] Git configuration complete"
 
+      - name: Configure Git Safe Directory
+        run: |
+          git config --global --add safe.directory /__w/fw-utilitysuite/fw-utilitysuite
+
       - name: Deploy to GitHub Pages
         env:
           GITHUB_TOKEN: ${{ secrets.ACTIONS_DEPLOY_KEY }}
@@ -102,4 +106,3 @@ jobs:
           git remote set-url origin https://x-access-token:${{ secrets.ACTIONS_DEPLOY_KEY }}@github.com/azmusgb/fw-utilitysuite.git
           npm run deploy
           echo "##[debug] Deployment to GitHub Pages completed"
-
